@@ -1,0 +1,546 @@
+rm(list = ls()) 
+
+=================
+Linear Regression
+LC2013Base<-read.csv(file.choose(),header=T, na.strings="?")
+names(LC2013Base)
+attach(LC2013Base)
+dim(LC2013Base)
+summary(LC2013Base)
+
+======
+par(mfrow=c(1,2)) 
+
+plot(SubGrade , InterestRate , col ="red", varwidth =T, xlab=" Sub-Grade ", ylab =" Interest Rate ", main="Sub-Grade vs Interest Rate")
+
+plot(AnnuaLincome , InterestRate , col ="red", varwidth =T, xlab=" Annual Income ", ylab =" Interest Rate ", main="Annual Income vs Interest Rate")
+
+hist(AnnuaLincome , breaks =300, col ="purple", xlab ="Annual Income ",xlim=c(0,8000000),main="Histogram of Annual Income")
+
+plot(InterestRate, SubGrade, col ="blue", varwidth =T, xlab=" Interest Rate ", ylab =" Sub-Grade ", main="Interest Rate vs Sub-Grade")
+
+plot(InterestRate, AnnuaLincome, col ="blue", varwidth =T, xlab=" Interest Rate ", ylab =" Annual Income ", main="Interest Rate vs Annual Income")
+=========
+
+plot(LoanStatus, SubGrade, col ="green", varwidth =T, xlab=" Loan Status ", ylab =" Sub-Grade ", main="Loan Status vs Sub-Grade")
+
+plot(SubGrade, LoanStatus, col ="green", varwidth =T, xlab=" Sub-Grade ", ylab =" Loan Status ", main="Loan Status vs Sub-Grade")
+
+================
+Cut out Rich Borrowers:
+train=(AnnuaLincome < 250000)
+LC2013.test=LC2013Base[!train,]
+dim(LC2013.test)
+summary(LC2013.test)
+
+Less Than 250K
+LC2013=LC2013Base[train,]
+dim(LC2013)
+summary(LC2013)
+
+names(LC2013)
+attach(LC2013)
+dim(LC2013)
+summary(LC2013)
+
+======
+par(mfrow=c(1,3)) 
+
+plot(SubGrade , InterestRate , col ="red", varwidth =T, xlab=" Sub-Grade ", ylab =" Interest Rate ", main="Sub-Grade vs Interest Rate", data=LC2013)
+
+plot(AnnuaLincome , InterestRate , col ="red", varwidth =T, xlab=" Annual Income ", ylab =" Interest Rate ", main="Annual Income vs Interest Rate", data=LC2013)
+
+hist(AnnuaLincome , breaks =25, col ="green", xlab ="Annual Income ",xlim=c(0,250000),main="Histogram of Annual Income")
+
+plot(InterestRate, SubGrade, col ="blue", varwidth =T, xlab=" Interest Rate ", ylab =" Sub-Grade ", main="Interest Rate vs Sub-Grade", data=LC2013)
+
+plot(InterestRate, AnnuaLincome, col ="blue", varwidth =T, xlab=" Interest Rate ", ylab =" Annual Income ", main="Interest Rate vs Annual Income", data=LC2013)
+=========
+
+Appropriate Training and Testing Data:
+positions <- sample(nrow(LC2013), size = floor((nrow(LC2013)/4) * 3))
+training <- LC2013[positions, ]
+testing <- LC2013[-positions, ]
+dim(testing)
+dim(training)
+
+====
+
+SET Training SET!!
+Appropriate Training and Testing Data:
+positions <- sample(nrow(LC2013), size = floor((nrow(LC2013)/100) * 3))
+training <- LC2013[positions, ]
+testing <- LC2013[-positions, ]
+dim(testing)
+dim(training)
+===============
+
+M1=lm(InterestRate~.,data= training)
+summary(M1)
+plot(M1)
+plot(predict(M1), residuals(M1))
+
+pairs(training)
+
+M2=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+YearsWorking+HomeOwnership+Verification+Purpose,data= training)
+summary(M2)
+plot(M2)
+================
+SCALING?!?
+
+We first normalize the two quantitative input variables balance and income so that they would be on a comparable scale. The scale() function standardizes the quantitative variables.
+
+standardized.LoanAmount=scale(LoanAmount) 
+standardized.AnnuaLincome=scale(AnnuaLincome)
+standardized.DTI=scale(DTI)
+standardized.InterestRate=scale(InterestRate)
+
+contrasts(HomeOwnership)
+contrasts(Verification)
+contrasts(YearsWorking)
+contrasts(Purpose)
+contrasts(State)
+contrasts(LoanStatus)
+==================================
+M3=lm(standardized.InterestRate~standardized.LoanAmount+standardized.AnnuaLincome+standardized.DTI,data= training)
+summary(M3)
+plot(M3)
+
+
+M3=lm(standardized.InterestRate~standardized.LoanAmount+standardized.AnnuaLincome+standardized.DTI+YearsWorking+HomeOwnership+Verification+Purpose,data= training)
+summary(M2)
+plot(M2)
+
+lm.fit=lm(InterestRate~., data=LC2013Cluster)
+summary(lm.fit)
+plot(lm.fit)
+
+==
+Stepwise
+M4=lm(InterestRate~LoanAmount,data= training)
+summary(M4)
+plot(M4)
+
+M5=lm(InterestRate~AnnuaLincome,data= training)
+summary(M5)
+plot(M5)
+
+M6=lm(InterestRate~DTI,data= training)
+summary(M6)
+plot(M6)
+
+M7=lm(InterestRate~YearsWorking,data= training)
+summary(M7)
+plot(M7)
+
+M8=lm(InterestRate~HomeOwnership,data= training)
+summary(M8)
+plot(M8)
+
+M9=lm(InterestRate~Verification,data= training)
+summary(M9)
+plot(M9)
+
+M10=lm(InterestRate~Purpose,data= training)
+summary(M10)
+plot(M10)
+
+M11=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+YearsWorking+HomeOwnership+Verification+Purpose+State+Term, data= training)
+summary(M11)
+plot(M11)
+
+M12=lm(InterestRate~SubGrade,data= training)
+summary(M12)
+plot(M12)
+
+M13=lm(InterestRate~LoanAmount+DTI,data= training)
+summary(M13)
+plot(M13)
+
+M14=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose+Term, data= training)
+summary(M14)
+plot(M14)
+plot(predict(M1), residuals(M1))
+
+M15=lm(InterestRate~State,data= training)
+summary(M15)
+plot(M15)
+
+M16=lm(InterestRate~Term,data= training)
+summary(M16)
+plot(M16)
+
+==============
+Cross-validation
+
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M20error=rep(0,k)
+
+for(j in 1:k){ 
+M20=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose+Term, data= training[folds!=j,])
+M20error[j]=mean((InterestRate-predict(M20,training))[folds==j]^2) 
+} 
+=====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M21error=rep(0,k)
+
+for(j in 1:k){ 
+M21=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose, data= training[folds!=j,])
+M21error[j]=mean((InterestRate-predict(M21,training))[folds==j]^2) 
+} 
+====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M22error=rep(0,k)
+
+for(j in 1:k){ 
+M22=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification, data= training[folds!=j,])
+M22error[j]=mean((InterestRate-predict(M22,training))[folds==j]^2) 
+} 
+====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M23error=rep(0,k)
+
+for(j in 1:k){ 
+M23=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership, data= training[folds!=j,])
+M23error[j]=mean((InterestRate-predict(M23,training))[folds==j]^2) 
+} 
+=====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M24error=rep(0,k)
+
+for(j in 1:k){ 
+M24=lm(InterestRate~LoanAmount+AnnuaLincome+DTI, data= training[folds!=j,])
+M24error[j]=mean((InterestRate-predict(M24,training))[folds==j]^2) 
+} 
+=====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M25error=rep(0,k)
+
+for(j in 1:k){ 
+M25=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+Term, data= training[folds!=j,])
+M25error[j]=mean((InterestRate-predict(M25,training))[folds==j]^2) 
+} 
+=====
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M26error=rep(0,k)
+
+for(j in 1:k){ 
+M26=lm(InterestRate~AnnuaLincome+DTI+HomeOwnership+Purpose+Term, data= training[folds!=j,])
+M26error[j]=mean((InterestRate-predict(M26,training))[folds==j]^2) 
+} 
+=======
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M27error=rep(0,k)
+
+for(j in 1:k){ 
+M27=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Purpose+Term, data= training[folds!=j,])
+M27error[j]=mean((InterestRate-predict(M27,training))[folds==j]^2) 
+} 
+
+AIC(M27) 
+
+BIC(M27) 
+
+summary(M27)
+========
+
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M28error=rep(0,k)
+
+for(j in 1:k){ 
+M28=lm(InterestRate~AnnuaLincome+DTI+Purpose+Term, data= training[folds!=j,])
+M28error[j]=mean((InterestRate-predict(M28,training))[folds==j]^2) 
+} 
+
+AIC(M28) 
+
+BIC(M28) 
+
+summary(M28)
+========
+
+k=10 
+set.seed(1) 
+folds=sample(1:k,nrow(training),replace=TRUE)
+
+M29error=rep(0,k)
+
+for(j in 1:k){ 
+M29=lm(InterestRate~AnnuaLincome+DTI+Purpose+Term, data= training[folds!=j,])
+M29error[j]=mean((InterestRate-predict(M29,training))[folds==j]^2) 
+} 
+
+AIC(M29) 
+
+BIC(M29) 
+
+summary(M29)
+
+=====
+
+
+AIC(M20) 
+
+BIC(M20) 
+
+summary(M20)
+
+AIC(M21) 
+
+BIC(M21) 
+
+summary(M21)
+
+AIC(M22) 
+
+BIC(M22) 
+
+summary(M22)
+
+AIC(M23) 
+
+BIC(M23) 
+
+summary(M23)
+
+AIC(M24) 
+
+BIC(M24) 
+
+summary(M24)
+
+AIC(M25) 
+
+BIC(M25) 
+
+summary(M25)
+
+AIC(M26) 
+
+BIC(M26) 
+
+summary(M26)
+
+======
+par(mfrow=c(1,3))
+
+plot(predict(M26), residuals(M26)) 
+
+plot(predict(M26), rstudent(M26)) 
+
+plot(hatvalues(M26))
+
+summary(M26)
+
+names(M26) 
+
+coef(M26) 
+
+confint(M26)
+
+plot(M26)
+
+predict(M26, testing, interval="confidence") 
+
+predict(M26, testing, interval="prediction")
+
+
+LC2013Cluster<-read.csv(file.choose(),header=T, na.strings="?")
+======
+LC2013Base<-read.csv(file.choose(),header=T, na.strings="?")
+names(LC2013Base)
+attach(LC2013Base)
+dim(LC2013Base)
+summary(LC2013Base)
+
+==========
+names(LC2013Cluster)
+attach(LC2013Cluster)
+dim(LC2013Cluster)
+summary(LC2013Cluster)
+sum(is.na(LC2013Cluster))
+LC2013Cluster1=na.omit(LC2013Cluster)
+dim(LC2013Cluster1)
+
+=========
+Cut out Rich Borrowers:
+train=(AnnuaLincome < 250000)
+LC2013.test=LC2013Base[!train,]
+dim(LC2013.test)
+summary(LC2013.test)
+
+Less Than 250K
+LC2013Cluster=LC2013Base[train,]
+dim(LC2013)
+summary(LC2013)
+
+names(LC2013)
+attach(LC2013)
+dim(LC2013)
+summary(LC2013)
+
+names(LC2013Cluster)
+attach(LC2013Cluster)
+dim(LC2013Cluster)
+summary(LC2013Cluster)
+sum(is.na(LC2013Cluster))
+LC2013Cluster1=na.omit(LC2013Cluster)
+dim(LC2013Cluster1)
+
+======
+
+
+contrasts(SubGrade)
+contrasts(YearsWorking)
+contrasts(HomeOwnership)
+contrasts(Verification)
+contrasts(LoanStatus)
+contrasts(Purpose)
+contrasts(Term)
+contrasts(State)
+=====================
+
+SET Training SET!!
+Appropriate Training and Testing Data:
+positions4 <- sample(nrow(LC2013Cluster), size = floor((nrow(LC2013Cluster)/100) * 3))
+LC2013Cluster.training4 <- LC2013Cluster[positions4, ]
+LC2013Cluster.testing4 <- LC2013Cluster[-positions4, ]
+dim(LC2013Cluster.testing4)
+dim(LC2013Cluster.training4)
+
+==============
+positions1 <- sample(nrow(LC2013Cluster), size = floor((nrow(LC2013Cluster)/10) * 3))
+LC2013Cluster.training1 <- LC2013Cluster[positions1, ]
+LC2013Cluster.testing1 <- LC2013Cluster[-positions1, ]
+dim(LC2013Cluster.testing1)
+dim(LC2013Cluster.training1)
+
+Separate Further
+positions2 <- sample(nrow(LC2013Cluster.training1), size = floor((nrow(LC2013Cluster.training1)/10) * 3))
+LC2013Cluster.training2 <- LC2013Cluster[positions2, ]
+LC2013Cluster.testing2 <- LC2013Cluster[-positions2, ]
+dim(LC2013Cluster.testing2)
+dim(LC2013Cluster.training2)
+
+Even More
+positions3 <- sample(nrow(LC2013Cluster.training2), size = floor((nrow(LC2013Cluster.training2)/10) * 3))
+LC2013Cluster.training3 <- LC2013Cluster[positions3, ]
+LC2013Cluster.testing3 <- LC2013Cluster[-positions3, ]
+dim(LC2013Cluster.testing3)
+dim(LC2013Cluster.training3)
+
+========
+Clustering Script:
+Split Data - - and Create Labels
+LC2013Cluster.State.labs=LC2013Cluster.training4[,5]
+LC2013Cluster.Purpose.labs=LC2013Cluster.training4[,5]
+LC2013Cluster.SubGrade.labs=LC2013Cluster.training4[,5]
+LC2013Cluster.SubGrade.labs
+table(LC2013Cluster.SubGrade.labs)
+table(LC2013Cluster.State.labs)
+table(LC2013Cluster.Purpose.labs)
+LC2013Cluster.data=LC2013Cluster.training4[,1:4]
+
+May not need to RUN!
+LC2013Cluster.data=LC2013Cluster.training[,1:5]
+dim(LC2013Cluster.data)
+========
+
+
+set.seed(1) 
+km.out1 =kmeans (LC2013Cluster.data,3, nstart =1)
+km.out1 
+km.out1$cluster 
+km.out1$betweenss 
+km.out1$withinss 
+km.out1$tot.withinss 
+km.out1$totss
+plot(LC2013Cluster.data, col=(km.out1$cluster+1), pch=20, cex=2) 
+table(km.out1$cluster,LC2013Cluster.SubGrade.labs)
+
+plot(LC2013Cluster.training4, col=(km.out1$cluster+1), pch=20, cex=2) 
+
+
+set.seed(11) 
+km.out2 =kmeans (LC2013Cluster.data,7, nstart =1) 
+km.out2$betweenss 
+km.out2$withinss 
+km.out2$tot.withinss 
+km.out2$totss 
+plot(LC2013Cluster.data, col=(km.out2$cluster+1), pch=20, cex=2) 
+table(km.out2$cluster,LC2013Cluster.SubGrade.labs)
+
+set.seed(1) 
+km.out3 =kmeans (LC2013Cluster.data,4, nstart =20) 
+km.out3$betweenss 
+km.out3$withinss 
+km.out3$tot.withinss 
+km.out3$totss 
+plot(LC2013Cluster.data, col=(km.out3$cluster+1), pch=20, cex=2) 
+table(km.out3$cluster,LC2013Cluster.SubGrade.labs)
+
+set.seed(22) 
+km.out4 =kmeans (LC2013Cluster.data,6, nstart =20) 
+km.out4$betweenss 
+km.out4$withinss 
+km.out4$tot.withinss 
+km.out4$totss 
+plot(LC2013Cluster.data, col=(km.out4$cluster+1), pch=20, cex=2) 
+table(km.out4$cluster,LC2013Cluster.SubGrade.labs)
+
+km.out5 =kmeans (LC2013Cluster.data,7, nstart =20) 
+km.out5$betweenss 
+km.out5$withinss 
+km.out5$tot.withinss 
+km.out5$totss 
+plot(LC2013Cluster.data, col=(km.out5$cluster+1), pch=20, cex=2) 
+table(km.out5$cluster,LC2013Cluster.SubGrade.labs)
+
+wss = km.out5$totss 
+for (i in 2:10) wss[i] = sum(kmeans(LC2013Cluster.data,centers=i)$withinss) 
+plot(1:10, wss, type="b", xlab="Number of Clusters", ylab="Within groups sum of squares")
+
+
+
+Set Euclidean distance:
+LC2013Cluster1.dist=dist(LC2013Cluster.data)
+
+hc1=hclust(LC2013Cluster1.dist, method="complete") 
+hc2=hclust(LC2013Cluster1.dist, method="average") 
+hc3=hclust(LC2013Cluster1.dist, method="single")
+
+
+Plot 3!
+par(mfrow=c(1,3))
+plot(hc1, labels=LC2013Cluster.SubGrade.labs, main="Complete Linkage", xlab="", sub="", ylab="") 
+plot(hc2, labels=LC2013Cluster.SubGrade.labs, main="Average Linkage", xlab="", sub="",ylab="") 
+plot(hc3, labels=LC2013Cluster.SubGrade.labs, main="Single Linkage", xlab="", sub="",ylab="")
+
+==============================

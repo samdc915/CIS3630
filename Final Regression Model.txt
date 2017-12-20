@@ -1,0 +1,1417 @@
+> LC2013Base<-read.csv(file.choose(),header=T, na.strings="?")
+> names(LC2013Base)
+ [1] "LoanAmount"    "InterestRate"  "AnnuaLincome"  "DTI"          
+ [5] "YearsWorking"  "HomeOwnership" "Verification"  "LoanStatus"   
+ [9] "Purpose"       "State"         "Term"          "SubGrade"     
+> attach(LC2013Base)
+> dim(LC2013Base)
+[1] 188181     12
+> summary(LC2013Base)
+   LoanAmount     InterestRate     AnnuaLincome          DTI       
+ Min.   : 1000   Min.   :0.0600   Min.   :   4800   Min.   : 0.00  
+ 1st Qu.: 8000   1st Qu.:0.1114   1st Qu.:  45000   1st Qu.:11.34  
+ Median :12175   Median :0.1409   Median :  62000   Median :16.78  
+ Mean   :14354   Mean   :0.1428   Mean   :  72233   Mean   :17.06  
+ 3rd Qu.:20000   3rd Qu.:0.1727   3rd Qu.:  87000   3rd Qu.:22.58  
+ Max.   :35000   Max.   :0.2606   Max.   :7141778   Max.   :34.99  
+                                                                   
+    YearsWorking    HomeOwnership            Verification  
+ 10+ years:61199   MORTGAGE:97012   Not Verified   :58828  
+ 2 years  :16146   NONE    :   42   Source Verified:41964  
+ 5 years  :14270   OTHER   :   46   Verified       :87389  
+ 3 years  :13967   OWN     :15454                          
+ < 1 year :13224   RENT    :75627                          
+ 6 years  :11918                                           
+ (Other)  :57457                                           
+              LoanStatus                   Purpose           State      
+ Charged Off       : 26800   debt_consolidation:111451   CA     :30743  
+ Current           : 25357   credit_card       : 43170   NY     :16257  
+ Default           :    70   home_improvement  : 10297   TX     :14558  
+ Fully Paid        :134325   other             :  8896   FL     :12848  
+ In Grace Period   :   446   major_purchase    :  3659   IL     : 7313  
+ Late (16-30 days) :   240   small_business    :  2745   NJ     : 7212  
+ Late (31-120 days):   943   (Other)           :  7963   (Other):99250  
+         Term           SubGrade     
+  36 months:143892   B3     : 15618  
+  60 months: 44289   B4     : 14443  
+                     B2     : 13060  
+                     C1     : 11197  
+                     C2     : 10623  
+                     B1     : 10360  
+                     (Other):112880  
+> train=(AnnuaLincome < 250000)
+> LC2013.test=LC2013Base[!train,]
+> dim(LC2013.test)
+[1] 1535   12
+> summary(LC2013.test)
+   LoanAmount     InterestRate     AnnuaLincome          DTI        
+ Min.   : 2500   Min.   :0.0603   Min.   : 250000   Min.   : 0.000  
+ 1st Qu.:18000   1st Qu.:0.1016   1st Qu.: 263062   1st Qu.: 5.395  
+ Median :25000   Median :0.1409   Median : 300000   Median : 8.840  
+ Mean   :24617   Mean   :0.1429   Mean   : 364772   Mean   : 9.558  
+ 3rd Qu.:35000   3rd Qu.:0.1777   3rd Qu.: 375000   3rd Qu.:13.035  
+ Max.   :35000   Max.   :0.2606   Max.   :7141778   Max.   :34.340  
+                                                                    
+    YearsWorking  HomeOwnership           Verification
+ 10+ years:561   MORTGAGE:1079   Not Verified   : 12  
+ 2 years  :131   NONE    :   0   Source Verified:592  
+ 3 years  :126   OTHER   :   0   Verified       :931  
+ 5 years  :115   OWN     : 118                        
+ 7 years  :100   RENT    : 338                        
+ < 1 year : 96                                        
+ (Other)  :406                                        
+              LoanStatus                 Purpose        State    
+ Charged Off       : 151   debt_consolidation:706   CA     :282  
+ Current           : 233   credit_card       :284   NY     :212  
+ Default           :   1   home_improvement  :240   FL     :123  
+ Fully Paid        :1132   other             :107   TX     :114  
+ In Grace Period   :   1   small_business    : 71   NJ     :109  
+ Late (16-30 days) :   3   major_purchase    : 35   IL     : 71  
+ Late (31-120 days):  14   (Other)           : 92   (Other):624  
+         Term         SubGrade   
+  36 months:1154   B3     : 104  
+  60 months: 381   B2     :  96  
+                   A5     :  88  
+                   B4     :  83  
+                   C1     :  80  
+                   B1     :  79  
+                   (Other):1005  
+> LC2013=LC2013Base[train,]
+> dim(LC2013)
+[1] 186646     12
+> summary(LC2013)
+   LoanAmount     InterestRate     AnnuaLincome         DTI       
+ Min.   : 1000   Min.   :0.0600   Min.   :  4800   Min.   : 0.00  
+ 1st Qu.: 8000   1st Qu.:0.1114   1st Qu.: 45000   1st Qu.:11.42  
+ Median :12000   Median :0.1409   Median : 62000   Median :16.84  
+ Mean   :14270   Mean   :0.1428   Mean   : 69827   Mean   :17.12  
+ 3rd Qu.:20000   3rd Qu.:0.1727   3rd Qu.: 85257   3rd Qu.:22.63  
+ Max.   :35000   Max.   :0.2606   Max.   :249000   Max.   :34.99  
+                                                                  
+    YearsWorking    HomeOwnership            Verification  
+ 10+ years:60638   MORTGAGE:95933   Not Verified   :58816  
+ 2 years  :16015   NONE    :   42   Source Verified:41372  
+ 5 years  :14155   OTHER   :   46   Verified       :86458  
+ 3 years  :13841   OWN     :15336                          
+ < 1 year :13128   RENT    :75289                          
+ 6 years  :11838                                           
+ (Other)  :57031                                           
+              LoanStatus                   Purpose           State      
+ Charged Off       : 26649   debt_consolidation:110745   CA     :30461  
+ Current           : 25124   credit_card       : 42886   NY     :16045  
+ Default           :    69   home_improvement  : 10057   TX     :14444  
+ Fully Paid        :133193   other             :  8789   FL     :12725  
+ In Grace Period   :   445   major_purchase    :  3624   IL     : 7242  
+ Late (16-30 days) :   237   small_business    :  2674   NJ     : 7103  
+ Late (31-120 days):   929   (Other)           :  7871   (Other):98626  
+         Term           SubGrade     
+  36 months:142738   B3     : 15514  
+  60 months: 43908   B4     : 14360  
+                     B2     : 12964  
+                     C1     : 11117  
+                     C2     : 10557  
+                     B1     : 10281  
+                     (Other):111853  
+> names(LC2013)
+ [1] "LoanAmount"    "InterestRate"  "AnnuaLincome"  "DTI"          
+ [5] "YearsWorking"  "HomeOwnership" "Verification"  "LoanStatus"   
+ [9] "Purpose"       "State"         "Term"          "SubGrade"     
+> attach(LC2013)
+The following objects are masked from LC2013Base:
+
+    AnnuaLincome, DTI, HomeOwnership, InterestRate, LoanAmount,
+    LoanStatus, Purpose, State, SubGrade, Term, Verification,
+    YearsWorking
+
+> dim(LC2013)
+[1] 186646     12
+> summary(LC2013)
+   LoanAmount     InterestRate     AnnuaLincome         DTI       
+ Min.   : 1000   Min.   :0.0600   Min.   :  4800   Min.   : 0.00  
+ 1st Qu.: 8000   1st Qu.:0.1114   1st Qu.: 45000   1st Qu.:11.42  
+ Median :12000   Median :0.1409   Median : 62000   Median :16.84  
+ Mean   :14270   Mean   :0.1428   Mean   : 69827   Mean   :17.12  
+ 3rd Qu.:20000   3rd Qu.:0.1727   3rd Qu.: 85257   3rd Qu.:22.63  
+ Max.   :35000   Max.   :0.2606   Max.   :249000   Max.   :34.99  
+                                                                  
+    YearsWorking    HomeOwnership            Verification  
+ 10+ years:60638   MORTGAGE:95933   Not Verified   :58816  
+ 2 years  :16015   NONE    :   42   Source Verified:41372  
+ 5 years  :14155   OTHER   :   46   Verified       :86458  
+ 3 years  :13841   OWN     :15336                          
+ < 1 year :13128   RENT    :75289                          
+ 6 years  :11838                                           
+ (Other)  :57031                                           
+              LoanStatus                   Purpose           State      
+ Charged Off       : 26649   debt_consolidation:110745   CA     :30461  
+ Current           : 25124   credit_card       : 42886   NY     :16045  
+ Default           :    69   home_improvement  : 10057   TX     :14444  
+ Fully Paid        :133193   other             :  8789   FL     :12725  
+ In Grace Period   :   445   major_purchase    :  3624   IL     : 7242  
+ Late (16-30 days) :   237   small_business    :  2674   NJ     : 7103  
+ Late (31-120 days):   929   (Other)           :  7871   (Other):98626  
+         Term           SubGrade     
+  36 months:142738   B3     : 15514  
+  60 months: 43908   B4     : 14360  
+                     B2     : 12964  
+                     C1     : 11117  
+                     C2     : 10557  
+                     B1     : 10281  
+                     (Other):111853  
+> positions <- sample(nrow(LC2013), size = floor((nrow(LC2013)/100) * 3))
+> training <- LC2013[positions, ]
+> testing <- LC2013[-positions, ]
+> dim(testing)
+[1] 181047     12
+> dim(training)
+[1] 5599   12
+> M1=lm(InterestRate~.,data= training)
+> summary(M1)
+
+Call:
+lm(formula = InterestRate ~ ., data = training)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-0.0231255 -0.0012784  0.0004144  0.0017615  0.0097490 
+
+Coefficients:
+                               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                   5.961e-02  9.147e-04  65.166  < 2e-16 ***
+LoanAmount                   -1.259e-08  6.906e-09  -1.823 0.068395 .  
+AnnuaLincome                 -4.067e-10  1.453e-09  -0.280 0.779604    
+DTI                           2.211e-05  5.836e-06   3.789 0.000153 ***
+YearsWorking1 year            1.259e-04  2.293e-04   0.549 0.582871    
+YearsWorking10+ years        -5.322e-05  1.774e-04  -0.300 0.764196    
+YearsWorking2 years           8.301e-05  2.121e-04   0.391 0.695489    
+YearsWorking3 years           3.274e-04  2.202e-04   1.486 0.137224    
+YearsWorking4 years          -8.515e-05  2.351e-04  -0.362 0.717253    
+YearsWorking5 years           2.678e-04  2.165e-04   1.237 0.216213    
+YearsWorking6 years          -7.686e-05  2.237e-04  -0.344 0.731223    
+YearsWorking7 years           5.630e-05  2.345e-04   0.240 0.810300    
+YearsWorking8 years          -9.527e-05  2.465e-04  -0.386 0.699149    
+YearsWorking9 years           2.996e-04  2.595e-04   1.155 0.248251    
+YearsWorkingn/a               1.247e-04  2.557e-04   0.488 0.625895    
+HomeOwnershipOWN              1.739e-04  1.517e-04   1.146 0.251673    
+HomeOwnershipRENT            -2.317e-04  9.809e-05  -2.362 0.018191 *  
+VerificationSource Verified  -2.053e-04  1.205e-04  -1.703 0.088622 .  
+VerificationVerified         -1.745e-04  1.113e-04  -1.568 0.117044    
+LoanStatusCurrent             6.406e-04  1.617e-04   3.963 7.51e-05 ***
+LoanStatusFully Paid          3.581e-04  1.251e-04   2.864 0.004205 ** 
+LoanStatusIn Grace Period     1.601e-03  8.445e-04   1.896 0.057954 .  
+LoanStatusLate (16-30 days)   2.284e-03  1.379e-03   1.657 0.097669 .  
+LoanStatusLate (31-120 days)  1.812e-03  6.647e-04   2.726 0.006425 ** 
+Purposecredit_card            3.521e-04  4.509e-04   0.781 0.434899    
+Purposedebt_consolidation     3.846e-04  4.467e-04   0.861 0.389240    
+Purposehome_improvement       5.448e-04  4.769e-04   1.142 0.253369    
+Purposehouse                  3.971e-04  7.000e-04   0.567 0.570512    
+Purposemajor_purchase         8.975e-04  5.229e-04   1.716 0.086180 .  
+Purposemedical               -4.344e-04  6.713e-04  -0.647 0.517605    
+Purposemoving                 7.023e-04  7.144e-04   0.983 0.325594    
+Purposeother                  2.918e-04  4.802e-04   0.608 0.543445    
+Purposerenewable_energy       2.424e-04  1.592e-03   0.152 0.878993    
+Purposesmall_business         4.382e-04  5.824e-04   0.752 0.451853    
+Purposevacation               6.054e-04  8.331e-04   0.727 0.467457    
+Purposewedding               -2.391e-04  6.566e-04  -0.364 0.715792    
+StateAL                      -1.018e-03  8.041e-04  -1.266 0.205544    
+StateAR                       1.641e-04  8.668e-04   0.189 0.849874    
+StateAZ                       4.026e-05  7.720e-04   0.052 0.958409    
+StateCA                      -5.171e-05  7.286e-04  -0.071 0.943424    
+StateCO                      -2.240e-04  7.766e-04  -0.288 0.773063    
+StateCT                      -7.148e-04  7.907e-04  -0.904 0.366005    
+StateDC                       4.385e-04  1.071e-03   0.409 0.682355    
+StateDE                      -6.003e-04  1.113e-03  -0.539 0.589694    
+StateFL                      -3.356e-04  7.384e-04  -0.454 0.649504    
+StateGA                      -2.369e-05  7.596e-04  -0.031 0.975123    
+StateHI                       8.283e-04  8.788e-04   0.942 0.345983    
+StateIL                      -2.956e-04  7.560e-04  -0.391 0.695803    
+StateIN                      -2.013e-04  8.088e-04  -0.249 0.803465    
+StateKS                       1.698e-04  8.383e-04   0.203 0.839464    
+StateKY                      -6.091e-04  8.323e-04  -0.732 0.464328    
+StateLA                      -2.439e-04  8.195e-04  -0.298 0.766034    
+StateMA                      -5.971e-04  7.730e-04  -0.773 0.439848    
+StateMD                      -2.249e-05  7.723e-04  -0.029 0.976775    
+StateMI                      -1.684e-04  7.700e-04  -0.219 0.826914    
+StateMN                      -1.307e-04  7.947e-04  -0.165 0.869337    
+StateMO                       1.118e-04  7.890e-04   0.142 0.887339    
+StateMT                      -1.259e-03  1.089e-03  -1.156 0.247530    
+StateNC                      -2.285e-04  7.606e-04  -0.300 0.763869    
+StateNH                      -2.200e-05  8.841e-04  -0.025 0.980148    
+StateNJ                      -3.863e-04  7.523e-04  -0.514 0.607587    
+StateNM                      -4.041e-04  8.637e-04  -0.468 0.639912    
+StateNV                      -2.105e-04  7.917e-04  -0.266 0.790314    
+StateNY                       9.463e-05  7.348e-04   0.129 0.897538    
+StateOH                      -1.734e-04  7.584e-04  -0.229 0.819200    
+StateOK                      -7.435e-05  8.351e-04  -0.089 0.929057    
+StateOR                      -1.906e-04  8.067e-04  -0.236 0.813283    
+StatePA                      -2.220e-04  7.514e-04  -0.296 0.767616    
+StateRI                       9.358e-04  9.609e-04   0.974 0.330162    
+StateSC                       9.725e-05  8.070e-04   0.120 0.904092    
+StateSD                      -1.026e-03  1.247e-03  -0.823 0.410784    
+StateTN                      -8.295e-05  8.065e-04  -0.103 0.918087    
+StateTX                       1.074e-04  7.366e-04   0.146 0.884044    
+StateUT                       1.046e-04  8.489e-04   0.123 0.901927    
+StateVA                       6.668e-05  7.603e-04   0.088 0.930124    
+StateVT                       2.150e-05  1.357e-03   0.016 0.987359    
+StateWA                       1.687e-05  7.661e-04   0.022 0.982428    
+StateWI                      -3.195e-04  7.968e-04  -0.401 0.688501    
+StateWV                       4.312e-04  9.114e-04   0.473 0.636191    
+StateWY                       6.587e-04  9.715e-04   0.678 0.497770    
+Term 60 months               -3.028e-04  1.356e-04  -2.232 0.025628 *  
+SubGradeA2                    6.263e-03  3.829e-04  16.356  < 2e-16 ***
+SubGradeA3                    1.590e-02  3.579e-04  44.433  < 2e-16 ***
+SubGradeA4                    1.904e-02  3.383e-04  56.275  < 2e-16 ***
+SubGradeA5                    2.898e-02  3.200e-04  90.540  < 2e-16 ***
+SubGradeB1                    3.907e-02  3.066e-04 127.440  < 2e-16 ***
+SubGradeB2                    4.948e-02  3.009e-04 164.458  < 2e-16 ***
+SubGradeB3                    5.977e-02  2.929e-04 204.071  < 2e-16 ***
+SubGradeB4                    6.893e-02  2.956e-04 233.213  < 2e-16 ***
+SubGradeB5                    7.708e-02  3.177e-04 242.634  < 2e-16 ***
+SubGradeC1                    8.161e-02  3.058e-04 266.910  < 2e-16 ***
+SubGradeC2                    8.932e-02  3.150e-04 283.562  < 2e-16 ***
+SubGradeC3                    9.540e-02  3.164e-04 301.478  < 2e-16 ***
+SubGradeC4                    1.010e-01  3.161e-04 319.561  < 2e-16 ***
+SubGradeC5                    1.096e-01  3.297e-04 332.429  < 2e-16 ***
+SubGradeD1                    1.163e-01  3.323e-04 349.997  < 2e-16 ***
+SubGradeD2                    1.234e-01  3.483e-04 354.318  < 2e-16 ***
+SubGradeD3                    1.267e-01  3.702e-04 342.301  < 2e-16 ***
+SubGradeD4                    1.317e-01  3.610e-04 364.837  < 2e-16 ***
+SubGradeD5                    1.384e-01  3.774e-04 366.714  < 2e-16 ***
+SubGradeE1                    1.458e-01  4.397e-04 331.581  < 2e-16 ***
+SubGradeE2                    1.517e-01  4.084e-04 371.470  < 2e-16 ***
+SubGradeE3                    1.566e-01  4.412e-04 354.941  < 2e-16 ***
+SubGradeE4                    1.627e-01  4.499e-04 361.514  < 2e-16 ***
+SubGradeE5                    1.671e-01  5.114e-04 326.719  < 2e-16 ***
+SubGradeF1                    1.730e-01  5.503e-04 314.475  < 2e-16 ***
+SubGradeF2                    1.765e-01  5.637e-04 313.041  < 2e-16 ***
+SubGradeF3                    1.808e-01  6.429e-04 281.257  < 2e-16 ***
+SubGradeF4                    1.826e-01  7.157e-04 255.070  < 2e-16 ***
+SubGradeF5                    1.869e-01  8.210e-04 227.600  < 2e-16 ***
+SubGradeG1                    1.933e-01  8.389e-04 230.351  < 2e-16 ***
+SubGradeG2                    1.930e-01  8.965e-04 215.272  < 2e-16 ***
+SubGradeG3                    1.923e-01  1.124e-03 171.122  < 2e-16 ***
+SubGradeG4                    1.886e-01  2.230e-03  84.559  < 2e-16 ***
+SubGradeG5                    2.007e-01  3.054e-03  65.702  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.003032 on 5484 degrees of freedom
+Multiple R-squared:  0.9954,    Adjusted R-squared:  0.9953 
+F-statistic: 1.046e+04 on 114 and 5484 DF,  p-value: < 2.2e-16
+
+> plot(M1)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Warning messages:
+1: not plotting observations with leverage one:
+  3136 
+2: not plotting observations with leverage one:
+  3136 
+> M11=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+YearsWorking+HomeOwnership+Verification+Purpose+State+Term, data= training)
+> summary(M11)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    YearsWorking + HomeOwnership + Verification + Purpose + State + 
+    Term, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.108869 -0.024887 -0.000685  0.025612  0.124758 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  1.013e-01  1.045e-02   9.701  < 2e-16 ***
+LoanAmount                   1.846e-07  8.265e-08   2.233 0.025591 *  
+AnnuaLincome                -7.977e-08  1.735e-08  -4.597 4.39e-06 ***
+DTI                          5.224e-04  6.970e-05   7.494 7.73e-14 ***
+YearsWorking1 year           5.105e-03  2.754e-03   1.854 0.063836 .  
+YearsWorking10+ years        2.937e-03  2.130e-03   1.379 0.168034    
+YearsWorking2 years          4.001e-03  2.549e-03   1.570 0.116552    
+YearsWorking3 years          3.874e-03  2.650e-03   1.462 0.143813    
+YearsWorking4 years         -8.014e-04  2.830e-03  -0.283 0.777013    
+YearsWorking5 years          7.054e-04  2.604e-03   0.271 0.786464    
+YearsWorking6 years          3.351e-03  2.690e-03   1.246 0.212952    
+YearsWorking7 years          2.150e-03  2.822e-03   0.762 0.446067    
+YearsWorking8 years          3.508e-03  2.963e-03   1.184 0.236506    
+YearsWorking9 years          3.759e-03  3.124e-03   1.203 0.229007    
+YearsWorkingn/a              1.130e-03  3.071e-03   0.368 0.712930    
+HomeOwnershipOWN             1.081e-02  1.819e-03   5.943 2.96e-09 ***
+HomeOwnershipRENT            1.530e-02  1.161e-03  13.178  < 2e-16 ***
+VerificationSource Verified  3.540e-03  1.445e-03   2.450 0.014317 *  
+VerificationVerified         6.309e-03  1.335e-03   4.725 2.36e-06 ***
+Purposecredit_card           1.167e-02  5.420e-03   2.153 0.031398 *  
+Purposedebt_consolidation    1.788e-02  5.366e-03   3.332 0.000869 ***
+Purposehome_improvement      1.566e-02  5.729e-03   2.733 0.006299 ** 
+Purposehouse                 2.345e-02  8.411e-03   2.788 0.005318 ** 
+Purposemajor_purchase        1.385e-02  6.292e-03   2.201 0.027777 *  
+Purposemedical               4.289e-02  8.041e-03   5.334 9.98e-08 ***
+Purposemoving                4.910e-02  8.562e-03   5.735 1.03e-08 ***
+Purposeother                 4.827e-02  5.738e-03   8.412  < 2e-16 ***
+Purposerenewable_energy      3.963e-02  1.912e-02   2.072 0.038284 *  
+Purposesmall_business        4.968e-02  6.955e-03   7.142 1.04e-12 ***
+Purposevacation              3.652e-02  9.997e-03   3.653 0.000261 ***
+Purposewedding               3.746e-02  7.882e-03   4.753 2.06e-06 ***
+StateAL                     -9.994e-03  9.625e-03  -1.038 0.299200    
+StateAR                     -9.193e-03  1.041e-02  -0.883 0.377057    
+StateAZ                     -8.740e-03  9.241e-03  -0.946 0.344283    
+StateCA                     -9.724e-03  8.727e-03  -1.114 0.265261    
+StateCO                     -1.788e-02  9.304e-03  -1.922 0.054645 .  
+StateCT                     -7.544e-03  9.468e-03  -0.797 0.425598    
+StateDC                     -2.004e-03  1.283e-02  -0.156 0.875929    
+StateDE                     -3.896e-03  1.335e-02  -0.292 0.770361    
+StateFL                     -8.034e-03  8.843e-03  -0.909 0.363641    
+StateGA                     -6.939e-03  9.095e-03  -0.763 0.445524    
+StateHI                      3.191e-03  1.054e-02   0.303 0.762074    
+StateIL                     -7.122e-03  9.050e-03  -0.787 0.431342    
+StateIN                     -5.841e-03  9.675e-03  -0.604 0.546044    
+StateKS                     -4.168e-03  1.005e-02  -0.415 0.678238    
+StateKY                     -1.320e-02  9.976e-03  -1.323 0.185785    
+StateLA                     -7.746e-03  9.813e-03  -0.789 0.429916    
+StateMA                     -1.356e-02  9.265e-03  -1.464 0.143308    
+StateMD                     -5.727e-03  9.244e-03  -0.620 0.535591    
+StateMI                     -9.211e-03  9.213e-03  -1.000 0.317466    
+StateMN                     -1.031e-03  9.521e-03  -0.108 0.913762    
+StateMO                     -7.712e-03  9.442e-03  -0.817 0.414117    
+StateMT                     -9.541e-03  1.307e-02  -0.730 0.465521    
+StateNC                     -7.436e-03  9.114e-03  -0.816 0.414604    
+StateNH                     -1.464e-03  1.058e-02  -0.138 0.889970    
+StateNJ                     -8.152e-03  9.004e-03  -0.905 0.365295    
+StateNM                     -9.037e-03  1.037e-02  -0.872 0.383364    
+StateNV                     -1.381e-02  9.481e-03  -1.457 0.145311    
+StateNY                     -5.180e-03  8.800e-03  -0.589 0.556127    
+StateOH                     -5.361e-03  9.074e-03  -0.591 0.554709    
+StateOK                     -1.195e-02  1.002e-02  -1.192 0.233128    
+StateOR                     -1.586e-02  9.658e-03  -1.642 0.100687    
+StatePA                     -8.321e-03  9.000e-03  -0.924 0.355280    
+StateRI                     -5.922e-03  1.153e-02  -0.513 0.607682    
+StateSC                     -2.961e-03  9.670e-03  -0.306 0.759487    
+StateSD                     -1.015e-02  1.498e-02  -0.678 0.498046    
+StateTN                     -4.905e-03  9.658e-03  -0.508 0.611560    
+StateTX                     -8.272e-03  8.820e-03  -0.938 0.348335    
+StateUT                     -1.365e-02  1.019e-02  -1.340 0.180287    
+StateVA                     -8.444e-03  9.100e-03  -0.928 0.353449    
+StateVT                     -6.651e-03  1.631e-02  -0.408 0.683508    
+StateWA                     -5.366e-03  9.173e-03  -0.585 0.558575    
+StateWI                     -3.937e-03  9.547e-03  -0.412 0.680063    
+StateWV                     -2.136e-02  1.092e-02  -1.956 0.050553 .  
+StateWY                     -1.498e-02  1.165e-02  -1.286 0.198462    
+Term 60 months               4.762e-02  1.367e-03  34.833  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03658 on 5523 degrees of freedom
+Multiple R-squared:  0.3292,    Adjusted R-squared:  0.3201 
+F-statistic: 36.14 on 75 and 5523 DF,  p-value: < 2.2e-16
+
+> plot(M11)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> pairs(training)
+> M2=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+YearsWorking+HomeOwnership+Verification+Purpose,data= training)
+> summary(M2)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    YearsWorking + HomeOwnership + Verification + Purpose, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.118347 -0.028423 -0.000604  0.027950  0.143557 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  8.787e-02  6.449e-03  13.625  < 2e-16 ***
+LoanAmount                   1.198e-06  8.527e-08  14.048  < 2e-16 ***
+AnnuaLincome                -1.309e-07  1.885e-08  -6.943 4.27e-12 ***
+DTI                          5.817e-04  7.616e-05   7.638 2.59e-14 ***
+YearsWorking1 year           6.002e-03  3.032e-03   1.980  0.04777 *  
+YearsWorking10+ years        4.824e-03  2.339e-03   2.063  0.03920 *  
+YearsWorking2 years          4.463e-03  2.802e-03   1.593  0.11133    
+YearsWorking3 years          5.527e-03  2.911e-03   1.899  0.05761 .  
+YearsWorking4 years         -1.881e-03  3.115e-03  -0.604  0.54589    
+YearsWorking5 years          3.030e-03  2.866e-03   1.057  0.29046    
+YearsWorking6 years          4.558e-03  2.958e-03   1.541  0.12343    
+YearsWorking7 years          3.763e-03  3.106e-03   1.211  0.22576    
+YearsWorking8 years          6.160e-03  3.257e-03   1.891  0.05865 .  
+YearsWorking9 years          5.640e-03  3.425e-03   1.647  0.09968 .  
+YearsWorkingn/a             -4.387e-03  3.364e-03  -1.304  0.19227    
+HomeOwnershipOWN             1.021e-02  1.988e-03   5.135 2.92e-07 ***
+HomeOwnershipRENT            1.500e-02  1.218e-03  12.310  < 2e-16 ***
+VerificationSource Verified  1.149e-02  1.571e-03   7.314 2.96e-13 ***
+VerificationVerified         1.757e-02  1.426e-03  12.320  < 2e-16 ***
+Purposecredit_card           6.362e-03  5.962e-03   1.067  0.28597    
+Purposedebt_consolidation    1.491e-02  5.906e-03   2.524  0.01162 *  
+Purposehome_improvement      1.432e-02  6.303e-03   2.273  0.02309 *  
+Purposehouse                 2.258e-02  9.252e-03   2.441  0.01469 *  
+Purposemajor_purchase        1.195e-02  6.927e-03   1.724  0.08468 .  
+Purposemedical               3.949e-02  8.847e-03   4.464 8.22e-06 ***
+Purposemoving                4.199e-02  9.425e-03   4.455 8.55e-06 ***
+Purposeother                 4.886e-02  6.316e-03   7.735 1.22e-14 ***
+Purposerenewable_energy      2.937e-02  2.106e-02   1.395  0.16320    
+Purposesmall_business        4.305e-02  7.657e-03   5.622 1.98e-08 ***
+Purposevacation              3.512e-02  1.098e-02   3.199  0.00139 ** 
+Purposewedding               3.406e-02  8.673e-03   3.927 8.69e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.0404 on 5568 degrees of freedom
+Multiple R-squared:  0.175,     Adjusted R-squared:  0.1706 
+F-statistic: 39.37 on 30 and 5568 DF,  p-value: < 2.2e-16
+
+> plot(M2)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M3=lm(standardized.InterestRate~standardized.LoanAmount+standardized.AnnuaLincome+standardized.DTI,data= training)
+> summary(M3)
+
+Call:
+lm(formula = standardized.InterestRate ~ standardized.LoanAmount + 
+    standardized.AnnuaLincome + standardized.DTI, data = training)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.5035 -0.6990 -0.0376  0.6641 10.5787 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               -6.509e-15  2.238e-03    0.00        1    
+standardized.LoanAmount    2.057e-01  2.427e-03   84.77   <2e-16 ***
+standardized.AnnuaLincome -7.757e-02  2.473e-03  -31.37   <2e-16 ***
+standardized.DTI           1.231e-01  2.301e-03   53.48   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.9707 on 188177 degrees of freedom
+Multiple R-squared:  0.05774,   Adjusted R-squared:  0.05772 
+F-statistic:  3844 on 3 and 188177 DF,  p-value: < 2.2e-16
+
+> plot(M3)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M4=lm(InterestRate~LoanAmount,data= training)
+> summary(M4)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.093192 -0.030915 -0.001003  0.029910  0.124000 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 1.271e-01  1.185e-03  107.26   <2e-16 ***
+LoanAmount  1.075e-06  7.267e-08   14.79   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04352 on 5597 degrees of freedom
+Multiple R-squared:  0.03763,   Adjusted R-squared:  0.03746 
+F-statistic: 218.9 on 1 and 5597 DF,  p-value: < 2.2e-16
+
+> plot(M4)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M6=lm(InterestRate~DTI,data= training)
+> summary(M6)
+
+Call:
+lm(formula = InterestRate ~ DTI, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.092609 -0.031768 -0.002304  0.029993  0.125108 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 0.1265269  0.0014395   87.90   <2e-16 ***
+DTI         0.0009245  0.0000765   12.09   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.0438 on 5597 degrees of freedom
+Multiple R-squared:  0.02543,   Adjusted R-squared:  0.02526 
+F-statistic:   146 on 1 and 5597 DF,  p-value: < 2.2e-16
+
+> plot(M6)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M7=lm(InterestRate~YearsWorking,data= training)
+> summary(M7)
+
+Call:
+lm(formula = InterestRate ~ YearsWorking, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.085022 -0.032629 -0.001976  0.030849  0.118784 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(>|t|)    
+(Intercept)            0.1395156  0.0023025  60.592   <2e-16 ***
+YearsWorking1 year     0.0051603  0.0033170   1.556   0.1198    
+YearsWorking10+ years  0.0045132  0.0025286   1.785   0.0743 .  
+YearsWorking2 years    0.0010080  0.0030631   0.329   0.7421    
+YearsWorking3 years    0.0042510  0.0031834   1.335   0.1818    
+YearsWorking4 years   -0.0022482  0.0034038  -0.661   0.5090    
+YearsWorking5 years    0.0003704  0.0031309   0.118   0.9058    
+YearsWorking6 years    0.0035369  0.0032390   1.092   0.2749    
+YearsWorking7 years    0.0023358  0.0033864   0.690   0.4904    
+YearsWorking8 years    0.0058068  0.0035593   1.631   0.1028    
+YearsWorking9 years    0.0038591  0.0037423   1.031   0.3025    
+YearsWorkingn/a        0.0006737  0.0036203   0.186   0.8524    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04435 on 5587 degrees of freedom
+Multiple R-squared:  0.00246,   Adjusted R-squared:  0.0004959 
+F-statistic: 1.252 on 11 and 5587 DF,  p-value: 0.2459
+
+> plot(M7)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M8=lm(InterestRate~HomeOwnership,data= training)
+> summary(M8)
+
+Call:
+lm(formula = InterestRate ~ HomeOwnership, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.088795 -0.030487 -0.005251  0.028605  0.122013 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       0.1368874  0.0008172 167.512  < 2e-16 ***
+HomeOwnershipOWN  0.0081637  0.0021355   3.823 0.000133 ***
+HomeOwnershipRENT 0.0122080  0.0012430   9.821  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04398 on 5596 degrees of freedom
+Multiple R-squared:  0.01728,   Adjusted R-squared:  0.01693 
+F-statistic:  49.2 on 2 and 5596 DF,  p-value: < 2.2e-16
+
+> plot(M8)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M9=lm(InterestRate~Verification,data= training)
+> summary(M9)
+
+Call:
+lm(formula = InterestRate ~ Verification, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.092244 -0.031344  0.000556  0.030511  0.117511 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                 0.127489   0.001026 124.235   <2e-16 ***
+VerificationSource Verified 0.014546   0.001609   9.041   <2e-16 ***
+VerificationVerified        0.025055   0.001325  18.914   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04301 on 5596 degrees of freedom
+Multiple R-squared:  0.06011,   Adjusted R-squared:  0.05977 
+F-statistic: 178.9 on 2 and 5596 DF,  p-value: < 2.2e-16
+
+> plot(M9)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M10=lm(InterestRate~Purpose,data= training)
+> summary(M10)
+
+Call:
+lm(formula = InterestRate ~ Purpose, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.110799 -0.032828 -0.001228  0.028472  0.126319 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               0.114481   0.006247  18.327  < 2e-16 ***
+Purposecredit_card        0.018301   0.006360   2.878  0.00402 ** 
+Purposedebt_consolidation 0.029746   0.006292   4.728 2.33e-06 ***
+Purposehome_improvement   0.017945   0.006725   2.669  0.00764 ** 
+Purposehouse              0.033869   0.009877   3.429  0.00061 ***
+Purposemajor_purchase     0.015415   0.007409   2.081  0.03751 *  
+Purposemedical            0.042705   0.009468   4.511 6.60e-06 ***
+Purposemoving             0.052265   0.010072   5.189 2.19e-07 ***
+Purposeother              0.056618   0.006749   8.389  < 2e-16 ***
+Purposerenewable_energy   0.039144   0.022522   1.738  0.08227 .  
+Purposesmall_business     0.058260   0.008159   7.141 1.05e-12 ***
+Purposevacation           0.037177   0.011730   3.169  0.00154 ** 
+Purposewedding            0.041564   0.009265   4.486 7.40e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04328 on 5586 degrees of freedom
+Multiple R-squared:  0.05029,   Adjusted R-squared:  0.04825 
+F-statistic: 24.65 on 12 and 5586 DF,  p-value: < 2.2e-16
+
+> plot(M10)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> M12=lm(InterestRate~SubGrade,data= training)
+> summary(M12)
+
+Call:
+lm(formula = InterestRate ~ SubGrade, data = training)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-0.0235250 -0.0011850  0.0005072  0.0017416  0.0090125 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 0.0603000  0.0002538  237.59   <2e-16 ***
+SubGradeA2  0.0062377  0.0003818   16.34   <2e-16 ***
+SubGradeA3  0.0158554  0.0003565   44.48   <2e-16 ***
+SubGradeA4  0.0189539  0.0003354   56.52   <2e-16 ***
+SubGradeA5  0.0289510  0.0003184   90.93   <2e-16 ***
+SubGradeB1  0.0390620  0.0003043  128.36   <2e-16 ***
+SubGradeB2  0.0494289  0.0002980  165.85   <2e-16 ***
+SubGradeB3  0.0596941  0.0002900  205.84   <2e-16 ***
+SubGradeB4  0.0688738  0.0002922  235.69   <2e-16 ***
+SubGradeB5  0.0770775  0.0003141  245.42   <2e-16 ***
+SubGradeC1  0.0815376  0.0003024  269.62   <2e-16 ***
+SubGradeC2  0.0892420  0.0003096  288.25   <2e-16 ***
+SubGradeC3  0.0952928  0.0003103  307.10   <2e-16 ***
+SubGradeC4  0.1008584  0.0003083  327.19   <2e-16 ***
+SubGradeC5  0.1094440  0.0003226  339.29   <2e-16 ***
+SubGradeD1  0.1161745  0.0003265  355.87   <2e-16 ***
+SubGradeD2  0.1232777  0.0003427  359.77   <2e-16 ***
+SubGradeD3  0.1265268  0.0003628  348.75   <2e-16 ***
+SubGradeD4  0.1314708  0.0003530  372.39   <2e-16 ***
+SubGradeD5  0.1380850  0.0003663  377.01   <2e-16 ***
+SubGradeE1  0.1454897  0.0004282  339.80   <2e-16 ***
+SubGradeE2  0.1513733  0.0003953  382.95   <2e-16 ***
+SubGradeE3  0.1562063  0.0004264  366.33   <2e-16 ***
+SubGradeE4  0.1622851  0.0004356  372.55   <2e-16 ***
+SubGradeE5  0.1666706  0.0004963  335.85   <2e-16 ***
+SubGradeF1  0.1727000  0.0005341  323.35   <2e-16 ***
+SubGradeF2  0.1760250  0.0005443  323.38   <2e-16 ***
+SubGradeF3  0.1803500  0.0006290  286.71   <2e-16 ***
+SubGradeF4  0.1822091  0.0006971  261.36   <2e-16 ***
+SubGradeF5  0.1863875  0.0008026  232.24   <2e-16 ***
+SubGradeG1  0.1926333  0.0008263  233.13   <2e-16 ***
+SubGradeG2  0.1926154  0.0008820  218.39   <2e-16 ***
+SubGradeG3  0.1918875  0.0011063  173.46   <2e-16 ***
+SubGradeG4  0.1886000  0.0021684   86.98   <2e-16 ***
+SubGradeG5  0.2003000  0.0030561   65.54   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.003046 on 5564 degrees of freedom
+Multiple R-squared:  0.9953,    Adjusted R-squared:  0.9953 
+F-statistic: 3.477e+04 on 34 and 5564 DF,  p-value: < 2.2e-16
+
+> plot(M12)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Warning messages:
+1: In sqrt(crit * p * (1 - hh)/hh) : NaNs produced
+2: In sqrt(crit * p * (1 - hh)/hh) : NaNs produced
+> M13=lm(InterestRate~LoanAmount+DTI,data= training)
+> summary(M13)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + DTI, data = training)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.098821 -0.031107 -0.001661  0.029581  0.130199 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 1.130e-01  1.702e-03   66.41   <2e-16 ***
+LoanAmount  1.027e-06  7.196e-08   14.27   <2e-16 ***
+DTI         8.614e-04  7.528e-05   11.44   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04303 on 5596 degrees of freedom
+Multiple R-squared:  0.05964,   Adjusted R-squared:  0.0593 
+F-statistic: 177.4 on 2 and 5596 DF,  p-value: < 2.2e-16
+
+> plot(M13)
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+Waiting to confirm page change...
+> > M14=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose+Term, data= training)
+> summary(M14)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership + Verification + Purpose + Term, data = training)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.10902 -0.02525 -0.00087  0.02589  0.12507 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  9.465e-02  5.584e-03  16.951  < 2e-16 ***
+LoanAmount                   1.956e-07  8.215e-08   2.381 0.017289 *  
+AnnuaLincome                -7.695e-08  1.700e-08  -4.527 6.10e-06 ***
+DTI                          5.264e-04  6.881e-05   7.650 2.36e-14 ***
+HomeOwnershipOWN             1.107e-02  1.797e-03   6.159 7.81e-10 ***
+HomeOwnershipRENT            1.538e-02  1.086e-03  14.158  < 2e-16 ***
+VerificationSource Verified  3.456e-03  1.429e-03   2.419 0.015615 *  
+VerificationVerified         5.886e-03  1.301e-03   4.522 6.24e-06 ***
+Purposecredit_card           1.277e-02  5.395e-03   2.367 0.017946 *  
+Purposedebt_consolidation    1.869e-02  5.343e-03   3.498 0.000472 ***
+Purposehome_improvement      1.641e-02  5.701e-03   2.878 0.004022 ** 
+Purposehouse                 2.366e-02  8.369e-03   2.827 0.004712 ** 
+Purposemajor_purchase        1.468e-02  6.267e-03   2.343 0.019184 *  
+Purposemedical               4.378e-02  8.006e-03   5.468 4.75e-08 ***
+Purposemoving                5.021e-02  8.533e-03   5.883 4.25e-09 ***
+Purposeother                 4.936e-02  5.712e-03   8.642  < 2e-16 ***
+Purposerenewable_energy      4.224e-02  1.905e-02   2.217 0.026681 *  
+Purposesmall_business        5.053e-02  6.928e-03   7.294 3.43e-13 ***
+Purposevacation              3.745e-02  9.926e-03   3.773 0.000163 ***
+Purposewedding               3.810e-02  7.839e-03   4.860 1.20e-06 ***
+Term 60 months               4.779e-02  1.355e-03  35.269  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03658 on 5578 degrees of freedom
+Multiple R-squared:  0.3226,    Adjusted R-squared:  0.3202 
+F-statistic: 132.8 on 20 and 5578 DF,  p-value: < 2.2e-16
+
+> plot(M14)
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M4error=rep(0,k)
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M20error=rep(0,k)
+> for(j in 1:k){ 
++ M20=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose+Term, data= training[folds!=j,])
++ M20error[j]=mean((InterestRate-predict(M20,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M20, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M21error=rep(0,k)
+> for(j in 1:k){ 
++ M21=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification+Purpose, data= training[folds!=j,])
++ M21error[j]=mean((InterestRate-predict(M21,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M21, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M22error=rep(0,k)
+> for(j in 1:k){ 
++ M22=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Verification, data= training[folds!=j,])
++ M22error[j]=mean((InterestRate-predict(M22,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M22, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M23error=rep(0,k)
+> for(j in 1:k){ 
++ M23=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership, data= training[folds!=j,])
++ M23error[j]=mean((InterestRate-predict(M23,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M23, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M24error=rep(0,k)
+> for(j in 1:k){ 
++ M24=lm(InterestRate~LoanAmount+AnnuaLincome+DTI, data= training[folds!=j,])
++ M24error[j]=mean((InterestRate-predict(M24,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M24, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M25error=rep(0,k)
+> for(j in 1:k){ 
++ M25=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+Term, data= training[folds!=j,])
++ M25error[j]=mean((InterestRate-predict(M25,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M25, training) :
+  longer object length is not a multiple of shorter object length
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M26error=rep(0,k)
+> for(j in 1:k){ 
++ M26=lm(InterestRate~AnnuaLincome+DTI+HomeOwnership+Purpose+Term, data= training[folds!=j,])
++ M26error[j]=mean((InterestRate-predict(M26,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M26, training) :
+  longer object length is not a multiple of shorter object length
+> AIC(M20) 
+[1] -18881.62
+> BIC(M20) 
+[1] -18738.24
+> summary(M20)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership + Verification + Purpose + Term, data = training[folds != 
+    j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.108947 -0.025326 -0.000609  0.025871  0.125582 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  9.662e-02  5.838e-03  16.550  < 2e-16 ***
+LoanAmount                   2.093e-07  8.697e-08   2.406  0.01617 *  
+AnnuaLincome                -7.942e-08  1.800e-08  -4.412 1.05e-05 ***
+DTI                          5.117e-04  7.274e-05   7.035 2.27e-12 ***
+HomeOwnershipOWN             1.145e-02  1.903e-03   6.015 1.93e-09 ***
+HomeOwnershipRENT            1.544e-02  1.147e-03  13.468  < 2e-16 ***
+VerificationSource Verified  3.546e-03  1.502e-03   2.361  0.01827 *  
+VerificationVerified         5.965e-03  1.378e-03   4.330 1.52e-05 ***
+Purposecredit_card           1.090e-02  5.631e-03   1.936  0.05295 .  
+Purposedebt_consolidation    1.686e-02  5.575e-03   3.024  0.00251 ** 
+Purposehome_improvement      1.495e-02  5.979e-03   2.500  0.01244 *  
+Purposehouse                 1.938e-02  8.952e-03   2.164  0.03048 *  
+Purposemajor_purchase        1.289e-02  6.540e-03   1.971  0.04878 *  
+Purposemedical               4.310e-02  8.215e-03   5.247 1.61e-07 ***
+Purposemoving                4.927e-02  9.173e-03   5.371 8.19e-08 ***
+Purposeother                 4.916e-02  5.979e-03   8.222 2.53e-16 ***
+Purposerenewable_energy      4.051e-02  1.910e-02   2.121  0.03400 *  
+Purposesmall_business        4.997e-02  7.237e-03   6.904 5.68e-12 ***
+Purposevacation              3.426e-02  1.044e-02   3.280  0.00105 ** 
+Purposewedding               3.469e-02  8.285e-03   4.187 2.87e-05 ***
+Term 60 months               4.767e-02  1.437e-03  33.170  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03654 on 4979 degrees of freedom
+Multiple R-squared:  0.3244,    Adjusted R-squared:  0.3217 
+F-statistic: 119.5 on 20 and 4979 DF,  p-value: < 2.2e-16
+
+> AIC(M21) 
+[1] -17885.38
+> BIC(M21) 
+[1] -17748.52
+> summary(M21)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership + Verification + Purpose, data = training[folds != 
+    j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.120538 -0.028584 -0.000632  0.027950  0.138556 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  9.130e-02  6.448e-03  14.160  < 2e-16 ***
+LoanAmount                   1.238e-06  8.978e-08  13.786  < 2e-16 ***
+AnnuaLincome                -1.191e-07  1.984e-08  -6.001 2.10e-09 ***
+DTI                          5.878e-04  8.033e-05   7.318 2.92e-13 ***
+HomeOwnershipOWN             1.081e-02  2.103e-03   5.140 2.85e-07 ***
+HomeOwnershipRENT            1.538e-02  1.267e-03  12.139  < 2e-16 ***
+VerificationSource Verified  1.121e-02  1.640e-03   6.838 8.97e-12 ***
+VerificationVerified         1.660e-02  1.480e-03  11.216  < 2e-16 ***
+Purposecredit_card           5.186e-03  6.218e-03   0.834 0.404348    
+Purposedebt_consolidation    1.412e-02  6.159e-03   2.292 0.021935 *  
+Purposehome_improvement      1.389e-02  6.606e-03   2.103 0.035503 *  
+Purposehouse                 1.840e-02  9.891e-03   1.860 0.062926 .  
+Purposemajor_purchase        1.109e-02  7.225e-03   1.534 0.125027    
+Purposemedical               4.084e-02  9.077e-03   4.499 6.97e-06 ***
+Purposemoving                4.287e-02  1.013e-02   4.231 2.37e-05 ***
+Purposeother                 4.899e-02  6.606e-03   7.416 1.41e-13 ***
+Purposerenewable_energy      2.992e-02  2.110e-02   1.418 0.156301    
+Purposesmall_business        4.389e-02  7.993e-03   5.490 4.21e-08 ***
+Purposevacation              3.282e-02  1.154e-02   2.844 0.004467 ** 
+Purposewedding               3.072e-02  9.153e-03   3.357 0.000794 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04037 on 4980 degrees of freedom
+Multiple R-squared:  0.1751,    Adjusted R-squared:  0.1719 
+F-statistic: 55.63 on 19 and 4980 DF,  p-value: < 2.2e-16
+
+> AIC(M22) 
+[1] -17602.96
+> BIC(M22) 
+[1] -17544.31
+> summary(M22)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership + Verification, data = training[folds != j, 
+    ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.107950 -0.030178 -0.001334  0.028525  0.136237 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  1.068e-01  2.383e-03  44.811  < 2e-16 ***
+LoanAmount                   1.009e-06  8.985e-08  11.233  < 2e-16 ***
+AnnuaLincome                -1.035e-07  2.032e-08  -5.096 3.61e-07 ***
+DTI                          5.418e-04  8.211e-05   6.599 4.58e-11 ***
+HomeOwnershipOWN             1.027e-02  2.163e-03   4.746 2.13e-06 ***
+HomeOwnershipRENT            1.629e-02  1.288e-03  12.642  < 2e-16 ***
+VerificationSource Verified  1.302e-02  1.678e-03   7.755 1.06e-14 ***
+VerificationVerified         1.927e-02  1.513e-03  12.738  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04158 on 4992 degrees of freedom
+Multiple R-squared:  0.1229,    Adjusted R-squared:  0.1217 
+F-statistic: 99.96 on 7 and 4992 DF,  p-value: < 2.2e-16
+
+> AIC(M23) 
+[1] -17445.32
+> BIC(M23) 
+[1] -17399.7
+> summary(M23)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership, data = training[folds != j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.105678 -0.030172 -0.001697  0.028698  0.139532 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        1.105e-01  2.385e-03  46.348  < 2e-16 ***
+LoanAmount         1.411e-06  8.530e-08  16.540  < 2e-16 ***
+AnnuaLincome      -1.083e-07  2.058e-08  -5.263 1.47e-07 ***
+DTI                7.325e-04  8.180e-05   8.954  < 2e-16 ***
+HomeOwnershipOWN   9.693e-03  2.197e-03   4.412 1.05e-05 ***
+HomeOwnershipRENT  1.498e-02  1.305e-03  11.482  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04224 on 4994 degrees of freedom
+Multiple R-squared:  0.09412,   Adjusted R-squared:  0.09322 
+F-statistic: 103.8 on 5 and 4994 DF,  p-value: < 2.2e-16
+
+> AIC(M24) 
+[1] -17317.43
+> BIC(M24) 
+[1] -17284.84
+> summary(M24)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI, 
+    data = training[folds != j, ])
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.10257 -0.03107 -0.00167  0.02901  0.13558 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   1.223e-01  2.178e-03  56.170  < 2e-16 ***
+LoanAmount    1.337e-06  8.617e-08  15.520  < 2e-16 ***
+AnnuaLincome -1.532e-07  2.046e-08  -7.488 8.21e-14 ***
+DTI           6.836e-04  8.275e-05   8.260  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.0428 on 4996 degrees of freedom
+Multiple R-squared:  0.06991,   Adjusted R-squared:  0.06935 
+F-statistic: 125.2 on 3 and 4996 DF,  p-value: < 2.2e-16
+
+> AIC(M25) 
+[1] -18372.47
+> BIC(M25) 
+[1] -18333.37
+> summary(M25)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    Term, data = training[folds != j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.105014 -0.028020 -0.001819  0.026416  0.118423 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     1.297e-01  1.971e-03  65.797  < 2e-16 ***
+LoanAmount      3.504e-08  8.634e-08   0.406    0.685    
+AnnuaLincome   -1.152e-07  1.844e-08  -6.245 4.59e-10 ***
+DTI             4.940e-04  7.466e-05   6.617 4.06e-11 ***
+Term 60 months  5.018e-02  1.463e-03  34.291  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03851 on 4995 degrees of freedom
+Multiple R-squared:  0.2471,    Adjusted R-squared:  0.2465 
+F-statistic: 409.9 on 4 and 4995 DF,  p-value: < 2.2e-16
+
+> AIC(M26) 
+[1] -18856.23
+> BIC(M26) 
+[1] -18732.41
+> summary(M26)
+
+Call:
+lm(formula = InterestRate ~ AnnuaLincome + DTI + HomeOwnership + 
+    Purpose + Term, data = training[folds != j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.111858 -0.025720 -0.000685  0.025434  0.125930 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                9.729e-02  5.845e-03  16.645  < 2e-16 ***
+AnnuaLincome              -5.241e-08  1.616e-08  -3.242 0.001193 ** 
+DTI                        5.964e-04  7.120e-05   8.376  < 2e-16 ***
+HomeOwnershipOWN           1.113e-02  1.907e-03   5.835 5.73e-09 ***
+HomeOwnershipRENT          1.482e-02  1.144e-03  12.950  < 2e-16 ***
+Purposecredit_card         1.281e-02  5.630e-03   2.275 0.022922 *  
+Purposedebt_consolidation  1.899e-02  5.571e-03   3.409 0.000658 ***
+Purposehome_improvement    1.634e-02  5.990e-03   2.727 0.006408 ** 
+Purposehouse               2.208e-02  8.963e-03   2.464 0.013788 *  
+Purposemajor_purchase      1.384e-02  6.556e-03   2.110 0.034874 *  
+Purposemedical             4.354e-02  8.238e-03   5.286 1.30e-07 ***
+Purposemoving              5.121e-02  9.191e-03   5.571 2.66e-08 ***
+Purposeother               5.040e-02  5.990e-03   8.413  < 2e-16 ***
+Purposerenewable_energy    4.232e-02  1.914e-02   2.211 0.027098 *  
+Purposesmall_business      5.367e-02  7.225e-03   7.428 1.29e-13 ***
+Purposevacation            3.481e-02  1.047e-02   3.325 0.000892 ***
+Purposewedding             3.618e-02  8.304e-03   4.357 1.34e-05 ***
+Term 60 months             5.128e-02  1.261e-03  40.676  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03664 on 4982 degrees of freedom
+Multiple R-squared:  0.3201,    Adjusted R-squared:  0.3178 
+F-statistic:   138 on 17 and 4982 DF,  p-value: < 2.2e-16
+
+> summary(M26)
+
+> k=10 
+> set.seed(1) 
+> folds=sample(1:k,nrow(training),replace=TRUE)
+> M27error=rep(0,k)
+> for(j in 1:k){ 
++ M27=lm(InterestRate~LoanAmount+AnnuaLincome+DTI+HomeOwnership+Purpose+Term, data= training[folds!=j,])
++ M27error[j]=mean((InterestRate-predict(M27,training))[folds==j]^2) 
++ } 
+Warning messages:
+1: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+2: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+3: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+4: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+5: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+6: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+7: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+8: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+9: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+10: In InterestRate - predict(M27, training) :
+  longer object length is not a multiple of shorter object length
+> AIC(M27) 
+[1] -18866.83
+> BIC(M27) 
+[1] -18736.48
+> summary(M27)
+
+Call:
+lm(formula = InterestRate ~ LoanAmount + AnnuaLincome + DTI + 
+    HomeOwnership + Purpose + Term, data = training[folds != 
+    j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.109519 -0.025291 -0.000887  0.025388  0.126496 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                9.724e-02  5.838e-03  16.655  < 2e-16 ***
+LoanAmount                 2.994e-07  8.449e-08   3.544 0.000397 ***
+AnnuaLincome              -8.045e-08  1.798e-08  -4.475 7.82e-06 ***
+DTI                        5.685e-04  7.155e-05   7.947 2.35e-15 ***
+HomeOwnershipOWN           1.131e-02  1.906e-03   5.932 3.19e-09 ***
+HomeOwnershipRENT          1.506e-02  1.145e-03  13.150  < 2e-16 ***
+Purposecredit_card         1.130e-02  5.639e-03   2.004 0.045159 *  
+Purposedebt_consolidation  1.740e-02  5.583e-03   3.117 0.001837 ** 
+Purposehome_improvement    1.555e-02  5.987e-03   2.597 0.009435 ** 
+Purposehouse               2.053e-02  8.963e-03   2.291 0.022020 *  
+Purposemajor_purchase      1.360e-02  6.549e-03   2.077 0.037859 *  
+Purposemedical             4.354e-02  8.228e-03   5.291 1.27e-07 ***
+Purposemoving              5.039e-02  9.183e-03   5.487 4.28e-08 ***
+Purposeother               5.022e-02  5.984e-03   8.393  < 2e-16 ***
+Purposerenewable_energy    4.242e-02  1.912e-02   2.219 0.026544 *  
+Purposesmall_business      5.228e-02  7.227e-03   7.234 5.40e-13 ***
+Purposevacation            3.481e-02  1.046e-02   3.329 0.000879 ***
+Purposewedding             3.553e-02  8.296e-03   4.282 1.88e-05 ***
+Term 60 months             4.912e-02  1.399e-03  35.106  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.0366 on 4981 degrees of freedom
+Multiple R-squared:  0.3218,    Adjusted R-squared:  0.3194 
+F-statistic: 131.3 on 18 and 4981 DF,  p-value: < 2.2e-16
+
+> plot(predict(M26), residuals(M26)) 
+> plot(predict(M26), rstudent(M26)) 
+> plot(hatvalues(M26))
+> summary(M26)
+
+Call:
+lm(formula = InterestRate ~ AnnuaLincome + DTI + HomeOwnership + 
+    Purpose + Term, data = training[folds != j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.111858 -0.025720 -0.000685  0.025434  0.125930 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                9.729e-02  5.845e-03  16.645  < 2e-16 ***
+AnnuaLincome              -5.241e-08  1.616e-08  -3.242 0.001193 ** 
+DTI                        5.964e-04  7.120e-05   8.376  < 2e-16 ***
+HomeOwnershipOWN           1.113e-02  1.907e-03   5.835 5.73e-09 ***
+HomeOwnershipRENT          1.482e-02  1.144e-03  12.950  < 2e-16 ***
+Purposecredit_card         1.281e-02  5.630e-03   2.275 0.022922 *  
+Purposedebt_consolidation  1.899e-02  5.571e-03   3.409 0.000658 ***
+Purposehome_improvement    1.634e-02  5.990e-03   2.727 0.006408 ** 
+Purposehouse               2.208e-02  8.963e-03   2.464 0.013788 *  
+Purposemajor_purchase      1.384e-02  6.556e-03   2.110 0.034874 *  
+Purposemedical             4.354e-02  8.238e-03   5.286 1.30e-07 ***
+Purposemoving              5.121e-02  9.191e-03   5.571 2.66e-08 ***
+Purposeother               5.040e-02  5.990e-03   8.413  < 2e-16 ***
+Purposerenewable_energy    4.232e-02  1.914e-02   2.211 0.027098 *  
+Purposesmall_business      5.367e-02  7.225e-03   7.428 1.29e-13 ***
+Purposevacation            3.481e-02  1.047e-02   3.325 0.000892 ***
+Purposewedding             3.618e-02  8.304e-03   4.357 1.34e-05 ***
+Term 60 months             5.128e-02  1.261e-03  40.676  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03664 on 4982 degrees of freedom
+Multiple R-squared:  0.3201,    Adjusted R-squared:  0.3178 
+F-statistic:   138 on 17 and 4982 DF,  p-value: < 2.2e-16
+
+
+
+> coef(M26) 
+              (Intercept)              AnnuaLincome                       DTI 
+             9.729403e-02             -5.240645e-08              5.963549e-04 
+         HomeOwnershipOWN         HomeOwnershipRENT        Purposecredit_card 
+             1.112842e-02              1.482104e-02              1.281003e-02 
+Purposedebt_consolidation   Purposehome_improvement              Purposehouse 
+             1.899073e-02              1.633568e-02              2.208074e-02 
+    Purposemajor_purchase            Purposemedical             Purposemoving 
+             1.383551e-02              4.354348e-02              5.120520e-02 
+             Purposeother   Purposerenewable_energy     Purposesmall_business 
+             5.039692e-02              4.231810e-02              5.367075e-02 
+          Purposevacation            Purposewedding            Term 60 months 
+             3.481222e-02              3.618233e-02              5.128098e-02 
+
+
+
+
+
+
+> confint(M26)
+                                  2.5 %        97.5 %
+(Intercept)                8.583480e-02  1.087533e-01
+AnnuaLincome              -8.409308e-08 -2.071982e-08
+DTI                        4.567772e-04  7.359326e-04
+HomeOwnershipOWN           7.389273e-03  1.486756e-02
+HomeOwnershipRENT          1.257733e-02  1.706475e-02
+Purposecredit_card         1.773367e-03  2.384669e-02
+Purposedebt_consolidation  8.068684e-03  2.991277e-02
+Purposehome_improvement    4.593272e-03  2.807809e-02
+Purposehouse               4.509754e-03  3.965172e-02
+Purposemajor_purchase      9.830555e-04  2.668797e-02
+Purposemedical             2.739385e-02  5.969311e-02
+Purposemoving              3.318753e-02  6.922287e-02
+Purposeother               3.865295e-02  6.214089e-02
+Purposerenewable_energy    4.791554e-03  7.984464e-02
+Purposesmall_business      3.950611e-02  6.783539e-02
+Purposevacation            1.428444e-02  5.534000e-02
+Purposewedding             1.990333e-02  5.246132e-02
+Term 60 months             4.880939e-02  5.375257e-02
+

@@ -1,0 +1,176 @@
+> par(mfrow=c(1,3))
+> plot(predict(M26), residuals(M26)) 
+> plot(predict(M26), rstudent(M26)) 
+> plot(hatvalues(M26))
+> summary(M26)
+
+Call:
+lm(formula = InterestRate ~ AnnuaLincome + DTI + HomeOwnership + 
+    Purpose + Term, data = training[folds != j, ])
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.114265 -0.027049 -0.000795  0.027118  0.131300 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                9.190e-02  5.223e-03  17.596  < 2e-16 ***
+AnnuaLincome              -5.473e-10  1.208e-08  -0.045  0.96385    
+DTI                        6.177e-04  7.320e-05   8.438  < 2e-16 ***
+HomeOwnershipNONE          2.604e-02  1.888e-02   1.379  0.16796    
+HomeOwnershipOTHER         1.997e-02  2.181e-02   0.916  0.35976    
+HomeOwnershipOWN           7.900e-03  2.022e-03   3.907 9.46e-05 ***
+HomeOwnershipRENT          1.461e-02  1.164e-03  12.551  < 2e-16 ***
+Purposecredit_card         1.635e-02  5.077e-03   3.220  0.00129 ** 
+Purposedebt_consolidation  2.190e-02  5.006e-03   4.376 1.23e-05 ***
+Purposehome_improvement    2.245e-02  5.472e-03   4.102 4.15e-05 ***
+Purposehouse               1.039e-02  8.911e-03   1.166  0.24356    
+Purposemajor_purchase      1.344e-02  6.144e-03   2.188  0.02871 *  
+Purposemedical             5.697e-02  7.944e-03   7.170 8.56e-13 ***
+Purposemoving              4.616e-02  8.401e-03   5.494 4.12e-08 ***
+Purposeother               5.309e-02  5.559e-03   9.550  < 2e-16 ***
+Purposerenewable_energy   -8.812e-03  3.803e-02  -0.232  0.81679    
+Purposesmall_business      3.964e-02  6.511e-03   6.088 1.23e-09 ***
+Purposevacation            3.841e-02  9.154e-03   4.196 2.76e-05 ***
+Purposewedding             3.618e-02  8.787e-03   4.118 3.89e-05 ***
+Term 60 months             4.982e-02  1.299e-03  38.360  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.0377 on 5019 degrees of freedom
+Multiple R-squared:  0.2832,    Adjusted R-squared:  0.2805 
+F-statistic: 104.4 on 19 and 5019 DF,  p-value: < 2.2e-16
+
+
+> LC2013<-read.csv(file.choose(),header=T, na.strings="?")
+> dim(LC2013)
+[1] 188181     12
+> summary(LC2013)
+   LoanAmount     InterestRate     AnnuaLincome          DTI       
+ Min.   : 1000   Min.   :0.0600   Min.   :   4800   Min.   : 0.00  
+ 1st Qu.: 8000   1st Qu.:0.1114   1st Qu.:  45000   1st Qu.:11.34  
+ Median :12175   Median :0.1409   Median :  62000   Median :16.78  
+ Mean   :14354   Mean   :0.1428   Mean   :  72233   Mean   :17.06  
+ 3rd Qu.:20000   3rd Qu.:0.1727   3rd Qu.:  87000   3rd Qu.:22.58  
+ Max.   :35000   Max.   :0.2606   Max.   :7141778   Max.   :34.99  
+                                                                   
+    YearsWorking    HomeOwnership            Verification  
+ 10+ years:61199   MORTGAGE:97012   Not Verified   :58828  
+ 2 years  :16146   NONE    :   42   Source Verified:41964  
+ 5 years  :14270   OTHER   :   46   Verified       :87389  
+ 3 years  :13967   OWN     :15454                          
+ < 1 year :13224   RENT    :75627                          
+ 6 years  :11918                                           
+ (Other)  :57457                                           
+              LoanStatus                   Purpose           State      
+ Charged Off       : 26800   debt_consolidation:111451   CA     :30743  
+ Current           : 25357   credit_card       : 43170   NY     :16257  
+ Default           :    70   home_improvement  : 10297   TX     :14558  
+ Fully Paid        :134325   other             :  8896   FL     :12848  
+ In Grace Period   :   446   major_purchase    :  3659   IL     : 7313  
+ Late (16-30 days) :   240   small_business    :  2745   NJ     : 7212  
+ Late (31-120 days):   943   (Other)           :  7963   (Other):99250  
+         Term           SubGrade     
+  36 months:143892   B3     : 15618  
+  60 months: 44289   B4     : 14443  
+                     B2     : 13060  
+                     C1     : 11197  
+                     C2     : 10623  
+                     B1     : 10360  
+                     (Other):112880  
+> names(LC2013)
+ [1] "LoanAmount"    "InterestRate"  "AnnuaLincome"  "DTI"          
+ [5] "YearsWorking"  "HomeOwnership" "Verification"  "LoanStatus"   
+ [9] "Purpose"       "State"         "Term"          "SubGrade"     
+> attach(LC2013)
+> table(LoanStatus, SubGrade)
+                    SubGrade
+LoanStatus              A1    A2    A3    A4    A5    B1    B2    B3    B4
+  Charged Off          128   157   240   445   572   848  1180  1587  1719
+  Current              217   284   409   648   983  1125  1209  1471  1459
+  Default                0     0     0     4     2     1     6     2     4
+  Fully Paid          3904  3755  4248  5897  6611  8354 10622 12493 11194
+  In Grace Period        2     2     3     7    12    11     7    13    14
+  Late (16-30 days)      0     2     0     6     4     2    11    13    10
+  Late (31-120 days)     2     2     4     9    21    19    25    39    43
+                    SubGrade
+LoanStatus              B5    C1    C2    C3    C4    C5    D1    D2    D3
+  Charged Off         1227  1529  1508  1589  1646  1570  1429  1213  1049
+  Current              885  1249  1693  1808  1949  1740  1001   628   563
+  Default                1     1     3     6     5     5     4     2     2
+  Fully Paid          6977  8351  7306  6353  5930  5235  4822  4111  3454
+  In Grace Period       11    15    30    33    24    33    24    15     9
+  Late (16-30 days)     10    13    18    18    14    14    11     7     7
+  Late (31-120 days)    31    39    65    64    77    76    38    42    29
+                    SubGrade
+LoanStatus              D4    D5    E1    E2    E3    E4    E5    F1    F2
+  Charged Off         1131   931   576   763   596   625   501   431   386
+  Current              765   823   552   621   550   558   483   385   326
+  Default                2     2     3     2     1     2     3     1     4
+  Fully Paid          3130  2534  1378  1607  1208  1104   850   755   585
+  In Grace Period       19    17    13    17    13    16    17     9    14
+  Late (16-30 days)      4     8     7     8     7     5    11     8     6
+  Late (31-120 days)    29    37    32    29    32    29    25    25    18
+                    SubGrade
+LoanStatus              F3    F4    F5    G1    G2    G3    G4    G5
+  Charged Off          354   284   228   157    81    70    25    25
+  Current              281   242   175   102    83    43    26    21
+  Default                0     0     1     1     0     0     0     0
+  Fully Paid           486   331   291   166   116    79    53    35
+  In Grace Period       13    11     4     3     6     4     2     3
+  Late (16-30 days)      4     6     1     5     0     0     0     0
+  Late (31-120 days)    13    19    11     7     3     3     3     3
+> 
+> LC2013<-read.csv(file.choose(),header=T, na.strings="?")
+> names(LC2013)
+ [1] "LoanAmount"    "Term"          "InterestRate"  "Grade"        
+ [5] "YearsWorking"  "HomeOwnership" "AnnuaLincome"  "Verification" 
+ [9] "LoanStatus"    "Purpose"       "State"         "DTI"          
+> attach(LC2013)
+> dim(LC2013)
+[1] 188181     12
+> summary(LC2013)
+   LoanAmount            Term         InterestRate    Grade    
+ Min.   : 1000    36 months:143892   Min.   :0.0600   A:28580  
+ 1st Qu.: 8000    60 months: 44289   1st Qu.:0.1114   B:62623  
+ Median :12175                       Median :0.1409   C:50009  
+ Mean   :14354                       Mean   :0.1428   D:27892  
+ 3rd Qu.:20000                       3rd Qu.:0.1727   E:12244  
+ Max.   :35000                       Max.   :0.2606   F: 5708  
+                                                      G: 1125  
+    YearsWorking    HomeOwnership    AnnuaLincome              Verification  
+ 10+ years:61199   MORTGAGE:97012   Min.   :   4800   Not Verified   :58828  
+ 2 years  :16146   NONE    :   42   1st Qu.:  45000   Source Verified:41964  
+ 5 years  :14270   OTHER   :   46   Median :  62000   Verified       :87389  
+ 3 years  :13967   OWN     :15454   Mean   :  72233                          
+ < 1 year :13224   RENT    :75627   3rd Qu.:  87000                          
+ 6 years  :11918                    Max.   :7141778                          
+ (Other)  :57457                                                             
+              LoanStatus                   Purpose           State      
+ Charged Off       : 26800   debt_consolidation:111451   CA     :30743  
+ Current           : 25357   credit_card       : 43170   NY     :16257  
+ Default           :    70   home_improvement  : 10297   TX     :14558  
+ Fully Paid        :134325   other             :  8896   FL     :12848  
+ In Grace Period   :   446   major_purchase    :  3659   IL     : 7313  
+ Late (16-30 days) :   240   small_business    :  2745   NJ     : 7212  
+ Late (31-120 days):   943   (Other)           :  7963   (Other):99250  
+      DTI       
+ Min.   : 0.00  
+ 1st Qu.:11.34  
+ Median :16.78  
+ Mean   :17.06  
+ 3rd Qu.:22.58  
+ Max.   :34.99  
+                
+> table(LoanStatus, Grade)
+                    Grade
+LoanStatus               A     B     C     D     E     F     G
+  Charged Off         1542  6561  7842  5753  3061  1683   358
+  Current             2541  6149  8439  3780  2764  1409   275
+  Default                6    14    20    12    11     6     1
+  Fully Paid         24415 49640 33175 18051  6147  2448   449
+  In Grace Period       26    56   135    84    76    51    18
+  Late (16-30 days)     12    46    77    37    38    25     5
+  Late (31-120 days)    38   157   321   175   147    86    19
+> 
+
